@@ -1,0 +1,16 @@
+Común (Common):
+
+Probabilidad: 60%
+Pokémon: Caterpie, Pidgey, Ekans, Zubat
+Poco Común (Uncommon):
+
+Probabilidad: 25%
+Pokémon: Gastly, Chansey, Snorlax, Pinsir
+Épico (Epic):
+
+Probabilidad: 10%
+Pokémon: Dragonite, Charizard, Metagross, Salamence
+Legendario (Legendary):
+
+Probabilidad: 5%
+Pokémon: Deoxys, Mew, Mewtwo
