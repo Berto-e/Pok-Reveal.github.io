@@ -2,8 +2,7 @@
 const pokemonLootTable = [
   {
     rarity: "comun",
-    probability: 60,
-    shinyProbability: 15, // Probabilidad del 5% de que sea shiny
+    probability: 50, // Ajustado de 60 a 55
     pokemon: [
       { name: "Caterpie", points: 1 },
       { name: "Pidgey", points: 2 },
@@ -13,8 +12,7 @@ const pokemonLootTable = [
   },
   {
     rarity: "poco_comun",
-    probability: 25,
-    shinyProbability: 10, // Probabilidad del 3% de que sea shiny
+    probability: 20, // Ajustado de 30 a 25
     pokemon: [
       { name: "Gastly", points: 5 },
       { name: "Chansey", points: 7 },
@@ -24,8 +22,7 @@ const pokemonLootTable = [
   },
   {
     rarity: "epico",
-    probability: 10,
-    shinyProbability: 10, // Probabilidad del 1% de que sea shiny
+    probability: 15, // Ajustado de 15 a 13
     pokemon: [
       { name: "Dragonite", points: 17 },
       { name: "Charizard", points: 12 },
@@ -35,15 +32,37 @@ const pokemonLootTable = [
   },
   {
     rarity: "legendario",
-    probability: 5,
-    shinyProbability: 0, // No hay posibilidad de shiny para los legendarios
+    probability: 10, // Ajustado de 10 a 7
     pokemon: [
       { name: "Deoxys", points: 50 },
       { name: "Mew", points: 50 },
       { name: "Mewtwo", points: 50 },
     ],
   },
+  {
+    rarity: "variocolor",
+    probability: 5, // Ajustado de 5 a 10
+    pokemon: [
+      { name: "Zubat_shiny", points: 20 },
+      { name: "Charizard_shiny", points: 60 },
+      { name: "Caterpie_shiny", points: 15 },
+      { name: "Ekans_shiny", points: 15 },
+      { name: "Dragonite_shiny", points: 60 },
+      { name: "Metagross_shiny", points: 60 },
+      { name: "Salamence_shiny", points: 60 },
+      { name: "Pidgey_shiny", points: 20 },
+      { name: "Gastly_shiny", points: 40 },
+      { name: "Pinsir_shiny", points: 40 },
+      { name: "Chansey_shiny", points: 40 },
+      { name: "Mewtwo_shiny", points: 100 },
+      { name: "Mew_shiny", points: 100 },
+      { name: "Snorlax_shiny", points: 50 },
+      { name: "Venomoth_shiny", points: 40 },
+      { name: "Deoxys_shiny", points: 100 },
+    ],
+  },
 ];
+
 
 function updateScore() {
   document.querySelector("#puntos").textContent = "Score " + playerPoints;
@@ -65,19 +84,9 @@ function selectPokemon() {
       const randomIndex = Math.floor(Math.random() * category.pokemon.length);
       const selectedPokemon = category.pokemon[randomIndex];
 
-      // Determinar si el Pokémon es shiny
-      const shinyRoll = Math.random() * 100;
-      const isShiny = shinyRoll < category.shinyProbability;
+    
 
-      // Asignar puntos al Pokémon seleccionado
-      const pokemonName = isShiny
-        ? `${selectedPokemon.name}_shiny`
-        : selectedPokemon.name;
-      const pokemonPoints = isShiny
-        ? selectedPokemon.points * 3
-        : selectedPokemon.points; // Por ejemplo, duplicar puntos si es shiny
-
-      return { name: pokemonName, points: pokemonPoints };
+      return { name: selectedPokemon.name, points: selectedPokemon.points };
     }
   }
 }
