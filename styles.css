@@ -28,7 +28,7 @@ body {
 
 h1 {
   
-  font-size: 3em;
+  font-size: 2em;
   text-transform: uppercase;
   font-weight: 700;
   letter-spacing: .15em;
@@ -44,15 +44,17 @@ h1 {
   top: 15%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 40%;
+  width: 50%;
   text-align: center;
+  
   
 }
 
 .container {
-
+  
+ 
   width: 40%;
-  height: 20%;
+  height: 40vh;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -66,7 +68,7 @@ h1 {
 
 
 .pokeball {
-
+  
   display: inline-block;
   margin: 20px;
   width: 100px;

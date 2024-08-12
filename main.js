@@ -46,7 +46,7 @@ const pokemonLootTable = [
 ];
 
 function updateScore() {
-  document.querySelector("#puntos").textContent = "Score: " + playerPoints;
+  document.querySelector("#puntos").textContent = "Score " + playerPoints;
 }
 
 // Puntos del jugador
@@ -95,9 +95,7 @@ function startGame() {
   // Asignar el pokemon elegido a su sprite
   const spriteImg = document.querySelector("#sprite");
   spriteImg.src = "./data/images/" + selectedPokemon.name + ".png";
-  //Sprite shiny
-  spriteShiny = document.querySelector("#shiny_animation");
-  spriteShiny.src = "/data/animations/shiny.gif";
+  
   // Remover event listeners anteriores
   document.querySelectorAll(".pokeball").forEach((pokeball) => {
     const newPokeball = pokeball.cloneNode(true);
