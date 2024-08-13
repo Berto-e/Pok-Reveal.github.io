@@ -198,6 +198,7 @@ h1 {
 
 
 .pokemon {
+  
   opacity: 0;
   transition: opacity 0.5s ease-in-out;
   /* Transición suave de 0.5 segundos */
@@ -252,4 +253,44 @@ h1 {
   scale: 1.8;
 
 
+}
+
+#puntosExtras {
+  font-size: 2em;
+  z-index: 50;
+  color: white;
+  -webkit-text-stroke-width: 3px;
+  -webkit-text-stroke-color: black;
+  opacity: 0;
+  transition: opacity 0.5s ease-in-out;
+  animation: score 1s ease-in-out forwards;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7); /* Sombra oscura alrededor del texto */
+}
+
+
+@keyframes score {
+  0% {
+    opacity: 0;
+    transform: scale(1) translateY(0);
+  }
+  20% {
+    opacity: 0.4;
+    transform: scale(1.4) translateY(-20px); /* Subir ligeramente el texto */
+  }
+  40% {
+    opacity: 0.6;
+    transform: scale(1.8) translateY(-37px); /* Subir ligeramente el texto */
+  }
+  60% {
+    opacity: 0.8;
+    transform: scale(2) translateY(-40px); /* Seguir subiendo mientras escala */
+  }
+  80% {
+    opacity: 1;
+    transform: scale(2) translateY(-40px); /* Seguir subiendo mientras escala */
+  }
+  100% {
+    opacity: 0;
+    transform: scale(2) translateY(-40px); /* Seguir subiendo mientras escala */
+  }
 }

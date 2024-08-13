@@ -66,6 +66,7 @@ const pokemonLootTable = [
 
 function updateScore() {
   document.querySelector("#puntos").textContent = "Score " + playerPoints;
+  
 }
 
 // Puntos del jugador
@@ -134,6 +135,8 @@ function startGame() {
 
       // Puntuaje
       updateScore();
+      //Puntos del pokemon obtenido
+      document.querySelector("#puntosExtras").textContent = "+"+ selectedPokemon.points;
 
       // Eliminar las Pokéballs
       setTimeout(() => {
@@ -145,10 +148,8 @@ function startGame() {
         shinyPokemonAnimation();
       }
 
-      // Resetear el juego después de una pequeña pausa
-      setTimeout(() => {
-        resetGame();
-      }, 1800);
+       // Añadir el listener para iniciar la siguiente ronda al hacer clic en el Pokémon
+    document.querySelector(".pokemon").addEventListener("click", resetGame);
     });
   });
 }
