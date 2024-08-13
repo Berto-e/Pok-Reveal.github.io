@@ -148,7 +148,7 @@ function startGame() {
       // Resetear el juego después de una pequeña pausa
       setTimeout(() => {
         resetGame();
-      }, 1500);
+      }, 1800);
     });
   });
 }
