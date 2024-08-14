@@ -63,136 +63,153 @@ const pokemonLootTable = [
   },
 ];
 
-
-function updateScore() {
-  document.querySelector("#puntos").textContent = "Score " + playerPoints;
-  
-}
-
-// Puntos del jugador
+// Variables globales
 let playerPoints = 0;
 let rounds = 0;
 
+// Función para actualizar la puntuación en la interfaz
+function updateScore() {
+  document.querySelector("#puntos").textContent = "Score " + playerPoints;
+}
+
 // Función para seleccionar un Pokémon basado en la probabilidad
 function selectPokemon() {
-  const randomNum = Math.random() * 100; // Número aleatorio entre 0 y 100
+  const randomNum = Math.random() * 100;
   let cumulativeProbability = 0;
 
   for (const category of pokemonLootTable) {
     cumulativeProbability += category.probability;
     if (randomNum < cumulativeProbability) {
-      // Seleccionar un Pokémon aleatorio dentro de la categoría
       const randomIndex = Math.floor(Math.random() * category.pokemon.length);
-      const selectedPokemon = category.pokemon[randomIndex];
-
-    
-
-      return { name: selectedPokemon.name, points: selectedPokemon.points };
+      return category.pokemon[randomIndex];
     }
   }
 }
 
-function startGame() {
-  rounds++;
-
-  // Seleccionar un Pokémon aleatorio de la lista
-  const selectedPokemon = selectPokemon();
-  console.log("Pokémon seleccionado:", selectedPokemon.name);
-  console.log("Puntos obtenidos:", selectedPokemon.points);
-  // Puntos
-  playerPoints += selectedPokemon.points;
-
-  // Asignar el pokemon elegido a su sprite
-  const spriteImg = document.querySelector("#sprite");
-  spriteImg.src = "./data/images/" + selectedPokemon.name + ".png";
-  
-  // Remover event listeners anteriores
+// Función para configurar los listeners de las Pokéballs
+function setupPokeballListeners(selectedPokemon) {
   document.querySelectorAll(".pokeball").forEach((pokeball) => {
     const newPokeball = pokeball.cloneNode(true);
     pokeball.parentNode.replaceChild(newPokeball, pokeball);
-  });
 
-  // Click en la pokeball ->
-  document.querySelectorAll(".pokeball").forEach((pokeball) => {
-    pokeball.addEventListener("click", () => {
-      // Mostrar el pokemon obtenido
-      document.querySelector(".pokemon").style.display = "flex";
-      setTimeout(() => {
-        document.querySelector(".pokemon").style.opacity = "1";
-      }, 180);
-
-      // Animación apertura pokeball
-      pokeball.classList.add("open");
-
-      // Sonido del pokemon obtenido
-      var audio = new Audio(
-        "data/sounds/" + selectedPokemon.name.replace("_shiny", "") + ".mp3"
-      );
-      audio.volume = 0.1;
-      setTimeout(() => {
-        audio.play();
-      }, 200);
-
-      // Puntuaje
-      updateScore();
-      //Puntos del pokemon obtenido
-      document.querySelector("#puntosExtras").textContent = "+"+ selectedPokemon.points;
-
-      // Eliminar las Pokéballs
-      setTimeout(() => {
-        document.querySelector(".container").style.display = "none";
-      }, 200);
-
-      // Si sale shiny, realizar la animación para shiny
-      if (selectedPokemon.name.includes("_shiny")) {
-        shinyPokemonAnimation();
-      }
-
-       // Añadir el listener para iniciar la siguiente ronda al hacer clic en el Pokémon
-    document.querySelector(".pokemon").addEventListener("click", resetGame);
+    newPokeball.addEventListener("click", () => {
+      revealPokemon(selectedPokemon, newPokeball);
     });
   });
 }
 
-function shinyPokemonAnimation() {
-  var audio = new Audio("data/sounds/shiny.mp3");
+// Función para mostrar el Pokémon seleccionado
+function revealPokemon(selectedPokemon, pokeball) {
+  displayPokemon(selectedPokemon);
+  animatePokeball(pokeball);
+  playPokemonSound(selectedPokemon.name);
+  updateScore();
+  displayPoints(selectedPokemon.points);
 
-  // Reproduce el sonido
+  if (selectedPokemon.name.includes("_shiny")) {
+    shinyPokemonAnimation();
+  }
+
+  document.querySelector(".pokemon").addEventListener("click", resetGame);
+}
+
+// Función para mostrar el Pokémon en la pantalla
+function displayPokemon(selectedPokemon) {
+  const spriteImg = document.querySelector("#sprite");
+  spriteImg.src = "./data/images/" + selectedPokemon.name + ".png";
+
+  document.querySelector(".pokemon").style.display = "flex";
+  setTimeout(() => {
+    document.querySelector(".pokemon").style.opacity = "1";
+  }, 180);
+}
+
+// Función para animar la Pokéball
+function animatePokeball(pokeball) {
+  pokeball.classList.add("open");
+  setTimeout(() => {
+    document.querySelector(".container").style.display = "none";
+  }, 200);
+}
+
+// Función para reproducir el sonido del Pokémon
+function playPokemonSound(pokemonName) {
+  const audio = new Audio("data/sounds/" + pokemonName.replace("_shiny", "") + ".mp3");
+  audio.volume = 0.1;
+  setTimeout(() => {
+    audio.play();
+  }, 200);
+}
+
+// Función para mostrar los puntos obtenidos
+function displayPoints(points) {
+  const puntosExtras = document.querySelector("#puntosExtras");
+  puntosExtras.textContent = "+" + points;
+}
+
+// Función para animar un Pokémon shiny
+function shinyPokemonAnimation() {
+  const audio = new Audio("data/sounds/shiny.mp3");
   setTimeout(() => {
     audio.play();
   }, 300);
 
-  document.querySelector("#shiny_animation").style.display = "block";
+  const shinyAnimation = document.querySelector("#shiny_animation");
+  shinyAnimation.style.display = "block";
 }
 
+// Función para reiniciar el juego o iniciar una nueva ronda
 function resetGame() {
-  // Resetear la interfaz para la siguiente ronda
-  const animationElement = document.querySelector("#shiny_animation");
-  animationElement.src = "";
-  animationElement.src = "./data/animations/shiny.gif";
-  animationElement.style.display = "none";
-  document.querySelector(".pokemon").style.display = "none";
-  document.querySelector(".pokemon").style.opacity = "0";
-  document.querySelector(".container").style.display = "flex";
+  hidePokemon();
+  resetPokeballs();
 
-  // Restablecer la clase 'open' de las pokeballs
-  document.querySelectorAll(".pokeball").forEach((pokeball) => {
-    pokeball.classList.remove("open");
-  });
-
-  // Iniciar la siguiente ronda
   if (rounds < 3) {
     startGame();
   } else {
-    alert("¡Juego terminado! Total de puntos: " + playerPoints);
-    playerPoints = 0;
-    updateScore();
-    rounds = 0;
-
-    setTimeout(() => {
-      resetGame();
-    });
+    endGame();
   }
+}
+
+// Función para ocultar el Pokémon
+function hidePokemon() {
+  const shinyAnimation = document.querySelector("#shiny_animation");
+  shinyAnimation.style.display = "none";
+  shinyAnimation.src = "./data/animations/shiny.gif";
+
+  const pokemonElement = document.querySelector(".pokemon");
+  pokemonElement.style.display = "none";
+  pokemonElement.style.opacity = "0";
+
+  document.querySelector(".container").style.display = "flex";
+}
+
+// Función para reiniciar las Pokéballs
+function resetPokeballs() {
+  document.querySelectorAll(".pokeball").forEach((pokeball) => {
+    pokeball.classList.remove("open");
+  });
+}
+
+// Función para finalizar el juego
+function endGame() {
+  alert("¡Juego terminado! Total de puntos: " + playerPoints);
+  playerPoints = 0;
+  updateScore();
+  rounds = 0;
+  setTimeout(() => {
+    resetGame();
+  });
+}
+
+// Función para iniciar el juego
+function startGame() {
+  rounds++;
+  const selectedPokemon = selectPokemon();
+  console.log("Pokémon seleccionado:", selectedPokemon.name);
+  console.log("Puntos obtenidos:", selectedPokemon.points);
+
+  playerPoints += selectedPokemon.points;
+  setupPokeballListeners(selectedPokemon);
 }
 
 // Iniciar el juego
